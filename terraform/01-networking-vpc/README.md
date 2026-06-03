@@ -133,3 +133,21 @@ Internet Gateway = allows internet access
 Route table = decides where traffic goes
 Security Group = firewall for AWS resources
 Outputs = useful IDs for connecting future modules
+
+Internet
+    |
+Internet Gateway
+    |
+Public Route Table
+    |
+Public Subnet
+    |
+(Future Customer Portal EC2)
+
+--------------------------------
+
+Private Subnet
+    |
+(Future Order Service)
+(Future Billing DB)
+(Future Provisioning Service)
