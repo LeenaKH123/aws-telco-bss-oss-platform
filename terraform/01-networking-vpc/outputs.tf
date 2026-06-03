@@ -1,3 +1,4 @@
+# output displays information after deployment
 output "vpc_id" {
   value = aws_vpc.telco_vpc.id
 }
