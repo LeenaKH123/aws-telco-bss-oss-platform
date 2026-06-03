@@ -19,7 +19,16 @@ resource "aws_subnet" "public_subnet" { #create subnet, room inside the VPC hous
     Name = "${var.project_name}-public-subnet"
   }
 }
+resource "aws_subnet" "public_subnet_b" { # second public subnet required for ALB high availability
+  vpc_id                  = aws_vpc.telco_vpc.id
+  cidr_block              = var.public_subnet_b_cidr
+  map_public_ip_on_launch = true
+  availability_zone       = "${var.aws_region}b"
 
+  tags = {
+    Name = "${var.project_name}-public-subnet-b"
+  }
+}
 resource "aws_subnet" "private_subnet" { #private network, future location for databases, order service, billing, no public ip
   vpc_id            = aws_vpc.telco_vpc.id
   cidr_block        = var.private_subnet_cidr
@@ -27,6 +36,15 @@ resource "aws_subnet" "private_subnet" { #private network, future location for d
 
   tags = {
     Name = "${var.project_name}-private-subnet"
+  }
+}
+resource "aws_subnet" "private_subnet_b" { # second private subnet for future multi-AZ databases/services
+  vpc_id            = aws_vpc.telco_vpc.id
+  cidr_block        = var.private_subnet_b_cidr
+  availability_zone = "${var.aws_region}b"
+
+  tags = {
+    Name = "${var.project_name}-private-subnet-b"
   }
 }
 
@@ -54,6 +72,10 @@ resource "aws_route" "public_internet_route" { #create route
 
 resource "aws_route_table_association" "public_assoc" { #connects public subnet to public route table, without association route table exists but subnet does not use it.
   subnet_id      = aws_subnet.public_subnet.id
+  route_table_id = aws_route_table.public_rt.id
+}
+resource "aws_route_table_association" "public_assoc_b" { # connect second public subnet to public route table
+  subnet_id      = aws_subnet.public_subnet_b.id
   route_table_id = aws_route_table.public_rt.id
 }
 

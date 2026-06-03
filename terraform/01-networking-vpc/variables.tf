@@ -17,3 +17,12 @@ variable "public_subnet_cidr" { #public subnet network
 variable "private_subnet_cidr" { #private subnet
   default = "10.0.2.0/24"        #another subnet inside the VPC
 }
+
+# adding one more public subnet for the load balancer
+variable "public_subnet_b_cidr" {
+  default = "10.0.3.0/24"
+}
+# adding one more private subnet to improve the architecture to make it multi AZ, for later databases and private services
+variable "private_subnet_b_cidr" {
+  default = "10.0.4.0/24"
+}
