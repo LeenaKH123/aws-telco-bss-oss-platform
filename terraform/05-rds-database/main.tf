@@ -1,0 +1,70 @@
+data "terraform_remote_state" "networking" {
+  backend = "local"
+
+  config = {
+    path = "../01-networking-vpc/terraform.tfstate"
+  }
+}
+
+resource "aws_db_subnet_group" "telco_db_subnet_group" {
+  name = "${var.project_name}-db-subnet-group"
+
+  subnet_ids = [
+    data.terraform_remote_state.networking.outputs.private_subnet_id,
+    data.terraform_remote_state.networking.outputs.private_subnet_b_id
+  ]
+
+  tags = {
+    Name = "${var.project_name}-db-subnet-group"
+  }
+}
+
+resource "aws_security_group" "rds_sg" {
+  name        = "${var.project_name}-rds-sg"
+  description = "Allow database access from application layer"
+  vpc_id      = data.terraform_remote_state.networking.outputs.vpc_id
+
+  ingress {
+    description     = "Allow PostgreSQL from web/app security group"
+    from_port       = 5432
+    to_port         = 5432
+    protocol        = "tcp"
+    security_groups = [data.terraform_remote_state.networking.outputs.web_security_group_id]
+  }
+
+  egress {
+    description = "Allow outbound traffic"
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags = {
+    Name = "${var.project_name}-rds-sg"
+  }
+}
+
+resource "aws_db_instance" "telco_postgres" {
+  identifier             = "${var.project_name}-postgres-db"
+  engine                 = "postgres"
+  engine_version         = "16.3"
+  instance_class         = "db.t3.micro"
+  allocated_storage      = 20
+  storage_type           = "gp2"
+
+  db_name                = "telcodb"
+  username               = var.db_username
+  password               = var.db_password
+
+  db_subnet_group_name   = aws_db_subnet_group.telco_db_subnet_group.name
+  vpc_security_group_ids = [aws_security_group.rds_sg.id]
+
+  publicly_accessible    = false
+  skip_final_snapshot    = true
+  deletion_protection    = false
+
+  tags = {
+    Name = "${var.project_name}-postgres-db"
+  }
+}
