@@ -6,3 +6,6 @@ output "customer_portal_public_ip" {
 output "customer_portal_url" {
   value = "http://${aws_instance.customer_portal.public_ip}"
 }
+output "customer_portal_instance_id" {
+  value = aws_instance.customer_portal.id
+}

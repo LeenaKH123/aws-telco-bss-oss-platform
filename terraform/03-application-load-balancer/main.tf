@@ -1,7 +1,8 @@
+# Reads output from networking
 data "terraform_remote_state" "networking" {
-  backend = "local"
+  backend = "local" # backend fils is stored locally on the computer
 
-  config = {
+  config = { # start the configuration where to find the state file
     path = "../01-networking-vpc/terraform.tfstate"
   }
 }
