@@ -1,3 +1,18 @@
+data "terraform_remote_state" "security" {
+  backend = "local"
+
+  config = {
+    path = "../08-security-hardening/terraform.tfstate"
+  }
+}
+
+data "aws_secretsmanager_secret_version" "db_credentials" {
+  secret_id = data.terraform_remote_state.security.outputs.db_secret_arn
+}
+
+locals {
+  db_credentials = jsondecode(data.aws_secretsmanager_secret_version.db_credentials.secret_string)
+}
 data "terraform_remote_state" "networking" {
   backend = "local"
 
@@ -54,8 +69,8 @@ resource "aws_db_instance" "telco_postgres" {
   storage_type           = "gp2"
 
   db_name                = "telcodb"
-  username               = var.db_username
-  password               = var.db_password
+  username = local.db_credentials.username
+password = local.db_credentials.password
 
   db_subnet_group_name   = aws_db_subnet_group.telco_db_subnet_group.name
   vpc_security_group_ids = [aws_security_group.rds_sg.id]
@@ -66,5 +81,5 @@ resource "aws_db_instance" "telco_postgres" {
 
   tags = {
     Name = "${var.project_name}-postgres-db"
-  }
+ }
 }
