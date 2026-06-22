@@ -1,0 +1,78 @@
+name: Terraform CI
+
+on:
+  push:
+    branches:
+      - main
+
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  terraform-validation:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+
+      - name: Terraform Format Check
+        run: terraform fmt -check -recursive
+
+      - name: Validate Networking Module
+        run: |
+          cd terraform/01-networking-vpc
+          terraform init -backend=false
+          terraform validate
+
+      - name: Validate EC2 Module
+        run: |
+          cd terraform/02-customer-portal-ec2
+          terraform init -backend=false
+          terraform validate
+
+      - name: Validate ALB Module
+        run: |
+          cd terraform/03-application-load-balancer
+          terraform init -backend=false
+          terraform validate
+
+      - name: Validate Auto Scaling Module
+        run: |
+          cd terraform/04-auto-scaling-group
+          terraform init -backend=false
+          terraform validate
+
+      - name: Validate RDS Module
+        run: |
+          cd terraform/05-rds-database
+          terraform init -backend=false
+          terraform validate
+
+      - name: Validate S3 Module
+        run: |
+          cd terraform/06-s3-storage
+          terraform init -backend=false
+          terraform validate
+
+      - name: Validate Monitoring Module
+        run: |
+          cd terraform/07-cloudwatch-monitoring
+          terraform init -backend=false
+          terraform validate
+
+      - name: Validate Security Module
+        run: |
+          cd terraform/08-security-hardening
+          terraform init -backend=false
+          terraform validate
+
+      - name: Validate IAM Module
+        run: |
+          cd terraform/09-iam-roles
+          terraform init -backend=false
+          terraform validate
