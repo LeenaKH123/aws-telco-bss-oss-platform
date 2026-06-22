@@ -1,23 +1,30 @@
-data "terraform_remote_state" "iam" {
-  backend = "local"
-
-  config = {
-    path = "../09-iam-roles/terraform.tfstate"
-  }
-}
 data "terraform_remote_state" "networking" {
-  backend = "local"
+  backend = "s3"
 
   config = {
-    path = "../01-networking-vpc/terraform.tfstate"
+    bucket = "telco-bss-oss-terraform-state-a7015e3f"
+    key    = "01-networking-vpc/terraform.tfstate"
+    region = "us-east-1"
   }
 }
 
 data "terraform_remote_state" "alb" {
-  backend = "local"
+  backend = "s3"
 
   config = {
-    path = "../03-application-load-balancer/terraform.tfstate"
+    bucket = "telco-bss-oss-terraform-state-a7015e3f"
+    key    = "03-application-load-balancer/terraform.tfstate"
+    region = "us-east-1"
+  }
+}
+
+data "terraform_remote_state" "iam" {
+  backend = "s3"
+
+  config = {
+    bucket = "telco-bss-oss-terraform-state-a7015e3f"
+    key    = "09-iam-roles/terraform.tfstate"
+    region = "us-east-1"
   }
 }
 

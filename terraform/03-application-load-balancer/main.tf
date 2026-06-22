@@ -1,17 +1,20 @@
 # Reads output from networking
 data "terraform_remote_state" "networking" {
-  backend = "local" # backend fils is stored locally on the computer
-
-  config = { # start the configuration where to find the state file
-    path = "../01-networking-vpc/terraform.tfstate"
-  }
-}
-
-data "terraform_remote_state" "customer_portal" {
-  backend = "local"
+  backend = "s3"
 
   config = {
-    path = "../02-customer-portal-ec2/terraform.tfstate"
+    bucket = "telco-bss-oss-terraform-state-a7015e3f"
+    key    = "01-networking-vpc/terraform.tfstate"
+    region = "us-east-1"
+  }
+}
+data "terraform_remote_state" "customer_portal" {
+  backend = "s3"
+
+  config = {
+    bucket = "telco-bss-oss-terraform-state-a7015e3f"
+    key    = "02-customer-portal-ec2/terraform.tfstate"
+    region = "us-east-1"
   }
 }
 

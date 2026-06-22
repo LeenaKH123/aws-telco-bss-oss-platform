@@ -1,8 +1,20 @@
-data "terraform_remote_state" "security" {
-  backend = "local"
+data "terraform_remote_state" "networking" {
+  backend = "s3"
 
   config = {
-    path = "../08-security-hardening/terraform.tfstate"
+    bucket = "telco-bss-oss-terraform-state-a7015e3f"
+    key    = "01-networking-vpc/terraform.tfstate"
+    region = "us-east-1"
+  }
+}
+
+data "terraform_remote_state" "security" {
+  backend = "s3"
+
+  config = {
+    bucket = "telco-bss-oss-terraform-state-a7015e3f"
+    key    = "08-security-hardening/terraform.tfstate"
+    region = "us-east-1"
   }
 }
 
@@ -13,13 +25,9 @@ data "aws_secretsmanager_secret_version" "db_credentials" {
 locals {
   db_credentials = jsondecode(data.aws_secretsmanager_secret_version.db_credentials.secret_string)
 }
-data "terraform_remote_state" "networking" {
-  backend = "local"
 
-  config = {
-    path = "../01-networking-vpc/terraform.tfstate"
-  }
-}
+
+
 
 resource "aws_db_subnet_group" "telco_db_subnet_group" {
   name = "${var.project_name}-db-subnet-group"

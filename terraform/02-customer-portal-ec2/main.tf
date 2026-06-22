@@ -1,11 +1,10 @@
-# Read ouputs from networking Terraform state file
 data "terraform_remote_state" "networking" {
-  #state file is stored locally on your machine
-  backend = "local"
+  backend = "s3"
 
   config = {
-    # path to networking state file
-    path = "../01-networking-vpc/terraform.tfstate"
+    bucket = "telco-bss-oss-terraform-state-a7015e3f"
+    key    = "01-networking-vpc/terraform.tfstate"
+    region = "us-east-1"
   }
 }
 # find the latest Amzon Linux 2023 AMI
@@ -25,7 +24,7 @@ data "aws_ami" "amazon_linux" {
 # create EC2 instance for the telco customer portal
 resource "aws_instance" "customer_portal" {
   # use latest Amazon Linux AMI found above
-  ami = data.aws_ami.amazon_linux.id
+  ami = "ami-074bb5e3c681b0735"
 
   # free tier eligible EC2 instance type
   instance_type = "t2.micro"
