@@ -61,25 +61,25 @@ resource "aws_security_group" "rds_sg" {
 }
 
 resource "aws_db_instance" "telco_postgres" {
-  identifier             = "${var.project_name}-postgres-db"
-  engine                 = "postgres"
-  engine_version         = "16.3"
-  instance_class         = "db.t3.micro"
-  allocated_storage      = 20
-  storage_type           = "gp2"
+  identifier        = "${var.project_name}-postgres-db"
+  engine            = "postgres"
+  engine_version    = "16.3"
+  instance_class    = "db.t3.micro"
+  allocated_storage = 20
+  storage_type      = "gp2"
 
-  db_name                = "telcodb"
+  db_name  = "telcodb"
   username = local.db_credentials.username
-password = local.db_credentials.password
+  password = local.db_credentials.password
 
   db_subnet_group_name   = aws_db_subnet_group.telco_db_subnet_group.name
   vpc_security_group_ids = [aws_security_group.rds_sg.id]
 
-  publicly_accessible    = false
-  skip_final_snapshot    = true
-  deletion_protection    = false
+  publicly_accessible = false
+  skip_final_snapshot = true
+  deletion_protection = false
 
   tags = {
     Name = "${var.project_name}-postgres-db"
- }
+  }
 }

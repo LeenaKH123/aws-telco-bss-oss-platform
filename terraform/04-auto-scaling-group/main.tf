@@ -35,9 +35,9 @@ resource "aws_launch_template" "customer_portal_lt" {
   name_prefix   = "${var.project_name}-portal-lt-"
   image_id      = data.aws_ami.amazon_linux.id
   instance_type = "t2.micro"
-iam_instance_profile {
-  name = data.terraform_remote_state.iam.outputs.ec2_app_instance_profile_name
-}
+  iam_instance_profile {
+    name = data.terraform_remote_state.iam.outputs.ec2_app_instance_profile_name
+  }
 
   user_data = base64encode(<<-EOF
     #!/bin/bash
@@ -55,10 +55,10 @@ iam_instance_profile {
 }
 
 resource "aws_autoscaling_group" "customer_portal_asg" {
-  name                = "${var.project_name}-portal-asg"
-  desired_capacity    = 2
-  min_size            = 2
-  max_size            = 4
+  name             = "${var.project_name}-portal-asg"
+  desired_capacity = 2
+  min_size         = 2
+  max_size         = 4
   vpc_zone_identifier = [
     data.terraform_remote_state.networking.outputs.public_subnet_id,
     data.terraform_remote_state.networking.outputs.public_subnet_b_id
