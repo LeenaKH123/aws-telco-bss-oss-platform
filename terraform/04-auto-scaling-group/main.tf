@@ -1,3 +1,10 @@
+data "terraform_remote_state" "iam" {
+  backend = "local"
+
+  config = {
+    path = "../09-iam-roles/terraform.tfstate"
+  }
+}
 data "terraform_remote_state" "networking" {
   backend = "local"
 
@@ -28,6 +35,9 @@ resource "aws_launch_template" "customer_portal_lt" {
   name_prefix   = "${var.project_name}-portal-lt-"
   image_id      = data.aws_ami.amazon_linux.id
   instance_type = "t2.micro"
+iam_instance_profile {
+  name = data.terraform_remote_state.iam.outputs.ec2_app_instance_profile_name
+}
 
   user_data = base64encode(<<-EOF
     #!/bin/bash
