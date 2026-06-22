@@ -1,86 +1,176 @@
 # AWS Telco BSS/OSS Platform
 
-A hands-on cloud architecture project that models a **Telecom Business Support System (BSS) and Operations Support System (OSS)** using AWS services and Terraform Infrastructure as Code.
+A cloud-native telecommunications reference architecture demonstrating how a telecom operator can modernize customer-facing BSS/OSS workloads on AWS using Infrastructure as Code, automated governance, and secure-by-design principles.
 
-Designed from real-world telco domain knowledge, this project demonstrates how a telecommunications operator can migrate customer-facing and operational platforms to AWS — covering everything from customer onboarding through to billing, provisioning, monitoring, and audit.
+The solution models a production-oriented architecture including high availability, automated scaling, secure database access, centralized secrets management, monitoring, alerting, and CI/CD validation.
 
 ---
 
 ## Business Scenario
 
-A telecom operator wants to launch a cloud-based customer activation platform. This project simulates the core BSS/OSS components that power that platform end-to-end:
+Telecommunications operators typically manage multiple customer-facing and operational systems that support customer onboarding, service activation, billing, document management, monitoring, and operational support.
 
-- Customer onboarding & CRM
-- Order capture & management
-- Service activation & provisioning
-- Billing integration
-- Customer notifications
-- Monitoring, audit & compliance
+This project demonstrates how these capabilities can be implemented using AWS managed services and Infrastructure as Code while following modern cloud architecture principles.
 
 ---
 
 ## Architecture
 
-### Telecom-to-AWS Mapping
+Architecture documentation is available in:
 
-| Telecom Domain | AWS Implementation |
-|---|---|
-| CRM / Customer Portal | EC2 + Application Load Balancer |
-| Order Service Manager (OSM) | SQS Queue + EC2 Workers |
-| Provisioning / ASAP | EC2 Auto Scaling Group |
-| Billing System (BRM) | RDS (Billing Database) |
-| Integration Layer (OSB/AIA) | SQS + API Integration |
-| Customer Notifications | SNS |
-| Monitoring & Audit | CloudWatch + CloudTrail |
-| Data Storage | S3 + DynamoDB |
+* `diagrams/architecture.mmd`
+* `docs/architecture-overview.md`
 
-### AWS Services Used
+### Core Components
 
-`VPC` · `Public & Private Subnets` · `EC2` · `Application Load Balancer` · `Auto Scaling` · `RDS` · `DynamoDB` · `SQS` · `SNS` · `S3` · `IAM` · `CloudWatch` · `CloudTrail`
+* VPC with public and private subnets
+* Application Load Balancer
+* Auto Scaling Group
+* Amazon EC2 customer portal
+* Amazon RDS PostgreSQL database
+* Amazon S3 document repository
+* AWS Secrets Manager
+* IAM roles and instance profiles
+* Amazon CloudWatch monitoring
+* Amazon SNS alerting
+* GitHub Actions CI/CD validation
+
+---
+
+## Terraform Modules
+
+| Module                       | Description                                 |
+| ---------------------------- | ------------------------------------------- |
+| 01-networking-vpc            | VPC, subnets, routing, security groups      |
+| 02-customer-portal-ec2       | Customer portal EC2 deployment              |
+| 03-application-load-balancer | Application Load Balancer and target groups |
+| 04-auto-scaling-group        | Launch templates and Auto Scaling Group     |
+| 05-rds-database              | PostgreSQL database layer                   |
+| 06-s3-storage                | Secure document storage                     |
+| 07-cloudwatch-monitoring     | Monitoring and alerting                     |
+| 08-security-hardening        | Secrets Manager integration                 |
+| 09-iam-roles                 | Least-privilege IAM architecture            |
+
+---
+
+## Architecture Capabilities
+
+### High Availability
+
+* Multi-subnet architecture
+* Application Load Balancer
+* Auto Scaling Group
+* Managed database services
+
+### Security
+
+* Private database deployment
+* Secrets stored in AWS Secrets Manager
+* IAM least-privilege model
+* S3 public access blocked
+* Encrypted storage
+
+### Scalability
+
+* Elastic application tier
+* Auto Scaling Group
+* Managed storage services
+
+### Observability
+
+* CloudWatch alarms
+* SNS notifications
+* Infrastructure validation pipeline
+
+---
+
+## AWS Services Used
+
+### Compute
+
+* Amazon EC2
+* Auto Scaling Group
+
+### Networking
+
+* Amazon VPC
+* Public Subnets
+* Private Subnets
+* Security Groups
+* Application Load Balancer
+
+### Data Layer
+
+* Amazon RDS PostgreSQL
+* Amazon S3
+
+### Security
+
+* IAM
+* Secrets Manager
+
+### Operations
+
+* CloudWatch
+* SNS
+* GitHub Actions
 
 ---
 
 ## Project Structure
 
-```
+```text
 aws-telco-bss-oss-platform/
-├── terraform/          # Infrastructure as Code (HCL)
-├── .gitignore
-└── README.md
+├── diagrams/
+│   └── architecture.mmd
+├── docs/
+│   └── architecture-overview.md
+├── terraform/
+│   ├── 01-networking-vpc/
+│   ├── 02-customer-portal-ec2/
+│   ├── 03-application-load-balancer/
+│   ├── 04-auto-scaling-group/
+│   ├── 05-rds-database/
+│   ├── 06-s3-storage/
+│   ├── 07-cloudwatch-monitoring/
+│   ├── 08-security-hardening/
+│   └── 09-iam-roles/
+└── .github/
+    └── workflows/
+        └── terraform.yml
 ```
 
 ---
 
-## Infrastructure as Code
+## CI/CD
 
-All infrastructure is defined using **Terraform (HCL)**, enabling:
+GitHub Actions automatically performs:
 
-- Repeatable, version-controlled deployments
-- Environment consistency across dev/staging/production
-- Infrastructure review and auditability via code
+* Terraform format validation
+* Terraform initialization
+* Terraform configuration validation
 
----
-
-## Key Concepts Demonstrated
-
-- **Multi-tier VPC design** with public and private subnet separation
-- **High availability** through Auto Scaling and Load Balancing
-- **Event-driven architecture** using SQS for async order and provisioning flows
-- **Managed database layer** with RDS for billing data persistence
-- **Observability** through CloudWatch metrics, alarms, and CloudTrail audit logs
-- **IAM least-privilege** security model
+on every push and pull request.
 
 ---
 
-## Domain Context
+## Roadmap
 
-This project draws on real-world telco architecture experience. BSS/OSS platforms are the operational backbone of any telecommunications provider — managing everything from the moment a customer places an order to when their service is active and their bill is generated.
+Future enhancements include:
 
-Mapping these telco concepts to AWS services demonstrates both **cloud architecture skills** and **deep telecommunications domain knowledge**.
+* Terraform remote backend using S3 and DynamoDB
+* Route 53 custom domain integration
+* AWS WAF protection
+* CloudTrail audit logging
+* ECS/Fargate containerization
+* Multi-environment deployment strategy
 
 ---
 
 ## Author
 
-**Leena Al-Khalili** — Digital Transformation Leader | AWS Solutions Architect  
-[LinkedIn](https://www.linkedin.com/in/leena-alkhalili/) · [GitHub](https://github.com/LeenaKH123)
+**Leena Al-Khalili**
+
+LinkedIn: https://www.linkedin.com/in/leena-alkhalili/
+
+GitHub: https://github.com/LeenaKH123
