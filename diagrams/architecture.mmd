@@ -1,0 +1,36 @@
+flowchart TD
+    Internet[Internet Users] --> ALB[Application Load Balancer]
+
+    ALB --> ASG[Auto Scaling Group]
+    ASG --> EC2A[EC2 App Instance A]
+    ASG --> EC2B[EC2 App Instance B]
+
+    EC2A --> RDS[(RDS PostgreSQL)]
+    EC2B --> RDS
+
+    EC2A --> S3[S3 Documents Bucket]
+    EC2B --> S3
+
+    EC2A --> Secrets[Secrets Manager]
+    EC2B --> Secrets
+
+    CloudWatch[CloudWatch Alarms] --> SNS[SNS Email Alerts]
+
+    ALB --> CloudWatch
+    RDS --> CloudWatch
+    ASG --> CloudWatch
+
+    IAM[IAM Role + Instance Profile] --> EC2A
+    IAM --> EC2B
+
+    subgraph VPC[VPC]
+        subgraph PublicSubnets[Public Subnets]
+            ALB
+            EC2A
+            EC2B
+        end
+
+        subgraph PrivateSubnets[Private Subnets]
+            RDS
+        end
+    end
