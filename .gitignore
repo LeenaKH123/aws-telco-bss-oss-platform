@@ -8,3 +8,6 @@ crash.*.log
 *.tfvars.json
 .terraformrc
 terraform.rc
+terraform.tfvars
+.terraform/
+*.tfstate.backup

@@ -1,16 +1,20 @@
 data "terraform_remote_state" "alb" {
-  backend = "local"
+  backend = "s3"
 
   config = {
-    path = "../03-application-load-balancer/terraform.tfstate"
+    bucket = "telco-bss-oss-terraform-state-a7015e3f"
+    key    = "03-application-load-balancer/terraform.tfstate"
+    region = "us-east-1"
   }
 }
 
 data "terraform_remote_state" "rds" {
-  backend = "local"
+  backend = "s3"
 
   config = {
-    path = "../05-rds-database/terraform.tfstate"
+    bucket = "telco-bss-oss-terraform-state-a7015e3f"
+    key    = "05-rds-database/terraform.tfstate"
+    region = "us-east-1"
   }
 }
 
