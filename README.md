@@ -26,6 +26,14 @@ This platform models core telecommunications BSS/OSS capabilities:
 
 See `docs/business-capabilities.md` for details.
 ---
+## Architecture Governance
+
+Architecture decisions are documented using Architecture Decision Records (ADRs).
+
+See:
+- docs/architecture-decisions.md
+
+---
 ## Architecture
 
 Architecture documentation is available in:
