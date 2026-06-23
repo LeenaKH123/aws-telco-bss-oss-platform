@@ -13,7 +13,19 @@ Telecommunications operators typically manage multiple customer-facing and opera
 This project demonstrates how these capabilities can be implemented using AWS managed services and Infrastructure as Code while following modern cloud architecture principles.
 
 ---
+## Business Capabilities
 
+This platform models core telecommunications BSS/OSS capabilities:
+
+- Customer Onboarding
+- Order Management
+- Service Provisioning
+- Billing and Customer Records
+- Monitoring and Operations
+- Security and Compliance
+
+See `docs/business-capabilities.md` for details.
+---
 ## Architecture
 
 Architecture documentation is available in:
