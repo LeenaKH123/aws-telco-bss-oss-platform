@@ -40,7 +40,6 @@ It gets:
 public_subnet_id
 web_security_group_id
 # So Module 2 can place EC2 inside the correct subnet and attach the correct security group.
-This is more professional than copying IDs manually.
 
 2. Finds Amazon Linux AMI
 data "aws_ami" "amazon_linux"
@@ -65,7 +64,7 @@ associate_public_ip_address = true
 key_name = telco-key
 
 # Meaning:
-The EC2 instance is placed in the public subnet and given a public IP address so you can open it from your browser.
+The EC2 instance is placed in the public subnet and given a public IP address so it can be opened from the browser.
 
 4. Runs startup script
 user_data = <<-EOF
